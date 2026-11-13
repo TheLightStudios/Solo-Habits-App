@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Solo Habits" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Solo Habits">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-slate-950 text-slate-100 min-h-screen">
+    <nav class="flex justify-between items-center px-6 py-4 border-b border-cyan-500/30">
+      <%= link_to "SOLO HABITS", root_path, class: "text-cyan-400 font-bold tracking-widest" %>
+      <% if user_signed_in? %>
+        <div class="flex items-center gap-4 text-sm">
+          <%= link_to "Missões", root_path, class: "text-slate-300 hover:text-white" %>
+          <%= link_to "Loja", rewards_path, class: "text-slate-300 hover:text-white" %>
+          <span class="text-yellow-300">🪙 <%= current_user.coins %></span>
+          <%= button_to "Sair", destroy_user_session_path, method: :delete,
+                class: "text-cyan-400 hover:text-cyan-200" %>
+        </div>
+      <% end %>
+    </nav>
+
+    <main class="max-w-2xl mx-auto p-6">
+      <% if notice %>
+        <p class="mb-4 p-3 border border-cyan-400 bg-cyan-950/50 text-cyan-300 rounded"><%= notice %></p>
+      <% end %>
+      <% if alert %>
+        <p class="mb-4 p-3 border border-red-500 bg-red-950/50 text-red-300 rounded"><%= alert %></p>
+      <% end %>
+
+      <%= yield %>
+    </main>
+  </body>
+</html>

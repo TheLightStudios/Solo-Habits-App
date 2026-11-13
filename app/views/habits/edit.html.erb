@@ -1,0 +1,22 @@
+<%# app/views/habits/edit.html.erb %>
+<h1 class="text-2xl font-bold text-cyan-400 mb-6">EDITAR MISSÃO</h1>
+<%= render "form", habit: @habit %>
+<div class="mb-6 p-4 border border-cyan-500/30 rounded flex items-center justify-between gap-4">
+  <div>
+    <p>Nível <strong><%= current_user.level %></strong> · Rank <strong><%= current_user.rank %></strong></p>
+    <p class="text-sm text-slate-400">
+      XP: <%= current_user.xp %> / <%= current_user.xp_to_next_level %>
+    </p>
+  </div>
+
+  <%= link_to edit_profile_path, title: "Trocar imagem" do %>
+    <% if current_user.avatar.attached? %>
+      <%= image_tag current_user.avatar,
+            class: "w-20 h-20 rounded-full object-cover border-2 border-cyan-400 hover:border-cyan-200" %>
+    <% else %>
+      <div class="w-20 h-20 rounded-full border-2 border-dashed border-cyan-400 flex items-center justify-center text-xs text-cyan-400 text-center hover:border-cyan-200">
+        Add foto
+      </div>
+    <% end %>
+  <% end %>
+</div>

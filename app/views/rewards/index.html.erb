@@ -1,0 +1,51 @@
+<%# app/views/rewards/index.html.erb %>
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold text-cyan-400">LOJA DO SISTEMA</h1>
+  <%= link_to "+ Novo item", new_reward_path,
+        class: "px-4 py-2 border border-cyan-400 text-cyan-300 rounded hover:bg-cyan-400/10" %>
+</div>
+
+<div class="mb-6 p-4 border border-yellow-500/40 rounded text-yellow-300">
+  🪙 Seu saldo: <strong><%= current_user.coins %></strong> moedas
+</div>
+
+<% if @rewards.empty? %>
+  <p class="text-slate-400">A loja está vazia. Crie a primeira recompensa, por exemplo "1 episódio de série".</p>
+<% end %>
+
+<ul class="space-y-3">
+  <% @rewards.each do |reward| %>
+    <li class="flex justify-between items-center p-4 border border-slate-700 rounded">
+      <div>
+        <p class="font-semibold"><%= reward.name %></p>
+        <p class="text-xs text-yellow-400">🪙 <%= reward.cost %> moedas</p>
+      </div>
+
+      <div class="flex items-center gap-3 text-sm">
+        <% if current_user.coins >= reward.cost %>
+          <%= button_to "Comprar", reward_purchase_path(reward),
+                form: { data: { turbo_confirm: "Comprar #{reward.name} por #{reward.cost} moedas?" } },
+                class: "px-3 py-1 bg-yellow-500 text-slate-950 font-bold rounded hover:bg-yellow-300" %>
+        <% else %>
+          <span class="text-slate-500">Faltam <%= reward.cost - current_user.coins %> 🪙</span>
+        <% end %>
+        <%= link_to "Editar", edit_reward_path(reward), class: "text-slate-400 hover:text-white" %>
+        <%= button_to "Apagar", reward_path(reward), method: :delete,
+              form: { data: { turbo_confirm: "Remover este item da loja?" } },
+              class: "text-red-400 hover:text-red-300" %>
+      </div>
+    </li>
+  <% end %>
+</ul>
+
+<% if @purchases.any? %>
+  <h2 class="text-lg font-bold text-cyan-400 mt-10 mb-3">ÚLTIMAS COMPRAS</h2>
+  <ul class="space-y-2 text-sm text-slate-400">
+    <% @purchases.each do |purchase| %>
+      <li class="flex justify-between border-b border-slate-800 pb-2">
+        <span><%= purchase.reward_name %></span>
+        <span>-<%= purchase.cost %> 🪙 · <%= purchase.created_at.strftime("%d/%m %H:%M") %></span>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

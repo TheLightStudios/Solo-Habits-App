@@ -1,0 +1,30 @@
+<h1 class="text-2xl font-bold text-cyan-400 mb-6">PERFIL DO CAÇADOR</h1>
+
+<%= form_with model: @user, url: profile_path, method: :patch, class: "space-y-4" do |f| %>
+  <% if @user.errors.any? %>
+    <div class="p-3 border border-red-500 text-red-300 rounded">
+      <% @user.errors.full_messages.each do |msg| %>
+        <p><%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="flex items-center gap-4">
+    <% if @user.avatar.attached? %>
+      <%= image_tag @user.avatar, class: "w-24 h-24 rounded-full object-cover border-2 border-cyan-400" %>
+    <% else %>
+      <div class="w-24 h-24 rounded-full border-2 border-cyan-400 flex items-center justify-center text-3xl text-cyan-400">
+        <%= @user.email.first.upcase %>
+      </div>
+    <% end %>
+
+    <div>
+      <%= f.label :avatar, "Imagem do personagem (até 2 MB)", class: "block mb-1 text-sm text-slate-400" %>
+      <%= f.file_field :avatar, accept: "image/png,image/jpeg,image/webp,image/gif",
+            class: "text-sm text-slate-300" %>
+    </div>
+  </div>
+
+  <%= f.submit "Salvar", class: "px-4 py-2 bg-cyan-500 text-slate-950 font-bold rounded cursor-pointer" %>
+  <%= link_to "Cancelar", root_path, class: "ml-3 text-slate-400" %>
+<% end %>

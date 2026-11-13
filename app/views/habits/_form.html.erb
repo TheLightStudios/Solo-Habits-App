@@ -1,0 +1,29 @@
+<%= form_with model: habit, class: "space-y-4" do |f|%>
+    <% if habit.errors.any? %>
+        <div class="p-3 border border-red-500 text-red-300 rounded">
+            <% habit.errors.full_messages.each do |msg|%>
+                <p><%= msg %></p>
+            <%end%>
+        </div>
+    <%end%>
+
+    <div>
+        <%=f.label :name, "Nome da Missão", class: "block mb-1 text-sm text-slate-400"%>
+        <%= f.text_field :name, class: "w-full p-2 bg-slate-900 border border-slate-700 rounded"%>
+    </div>
+
+    <div>
+        <%= f.label :category, "Categoria", class: "block mb-1 text-sm text-slate-400" %>
+        <%= f.select :category, Habit::CATEGORY_ATTRIBUTES.keys.map { |c| [c.capitalize, c] },
+            {}, class: "w-full p-2 bg-slate-900 border border-slate-700 rounded" %>
+    </div>
+
+    <div>
+        <%= f.label :xp_reward, "XP (5 a 50)", class: "block mb-1 text-sm text-slate-400" %>
+        <%= f.number_field :xp_reward, min: 5, max: 50,
+            class: "w-full p-2 bg-slate-900 border border-slate-700 rounded" %>
+    </div>
+
+    <%= f.submit "Salvar", class: "px-4 py-2 bg-cyan-500 text-slate-950 font-bold rounded cursor-pointer" %>
+    <%= link_to "Cancelar", root_path, class: "ml-3 text-slate-400" %>
+<% end %>
