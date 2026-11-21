@@ -8,7 +8,7 @@ class CompletionsController < ApplicationController
     if completion.save
       message = "[SISTEMA] Missão Concluída: #{habit.name}"
       if current_user.level > level_before
-        message += " LEVEL UP! Você alcançou o nível #{current_user.level}"
+        message += " LEVEL UP! Você alcançou o nível #{current_user.level}. Distribua seus pontos em Status."
       end
       redirect_to root_path, notice: message
     else

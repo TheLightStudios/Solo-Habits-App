@@ -12,5 +12,8 @@ test:
   <<: *default
 
 production:
-  database: cache
-  <<: *default
+  adapter: async
+  
+# production:
+#   database: cache
+#   <<: *default

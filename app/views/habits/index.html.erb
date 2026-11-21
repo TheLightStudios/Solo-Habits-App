@@ -35,6 +35,9 @@
       <div>
         <p class="font-semibold"><%= habit.name %></p>
         <p class="text-xs text-slate-400"><%= habit.category.capitalize %> · +<%= habit.xp_reward %> XP</p>
+        <% if habit.mandatory? %>
+          <p class="text-xs text-red-400">⚠ Obrigatória · falhar custa -<%= habit.penalty_amount %> XP e -<%= habit.penalty_amount %> 🪙</p>
+        <% end %>
       </div>
 
       <div class="flex items-center gap-3 text-sm">
@@ -52,4 +55,3 @@
     </li>
   <% end %>
 </ul>
-

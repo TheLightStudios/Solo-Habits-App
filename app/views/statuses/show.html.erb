@@ -1,0 +1,40 @@
+<h1 class="text-2xl font-bold text-cyan-400 mb-2">STATUS DO CAÇADOR</h1>
+
+<p class="text-slate-300 mb-6">
+  Nível <strong><%= current_user.level %></strong> · Rank
+  <strong class="text-cyan-300"><%= current_user.rank %></strong>
+</p>
+
+<div class="mb-6 p-4 border rounded <%= current_user.attribute_points > 0 ? 'border-cyan-400 text-cyan-300' : 'border-slate-700 text-slate-400' %>">
+  ⚡ Pontos para distribuir: <strong><%= current_user.attribute_points %></strong>
+  <p class="text-xs text-slate-400 mt-1">
+    Você ganha <%= User::POINTS_PER_LEVEL %> pontos a cada level up.
+  </p>
+</div>
+
+<% values = User::ATTRIBUTE_LABELS.keys.map { |key| current_user[key] } %>
+<% scale = [values.max, 10].max %>
+
+<ul class="space-y-4">
+  <% User::ATTRIBUTE_LABELS.each do |key, label| %>
+    <% value = current_user[key] %>
+    <li class="p-4 border border-slate-700 rounded">
+      <div class="flex justify-between items-center mb-2">
+        <p class="font-semibold"><%= label %></p>
+
+        <div class="flex items-center gap-3">
+          <span class="text-xl font-bold text-cyan-300"><%= value %></span>
+          <% if current_user.attribute_points > 0 %>
+            <%= button_to "+", allocate_status_path, params: { attribute: key },
+                  class: "w-8 h-8 bg-cyan-500 text-slate-950 font-bold rounded hover:bg-cyan-300" %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+        <div class="h-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.7)]"
+             style="width: <%= (value * 100.0 / scale).round %>%"></div>
+      </div>
+    </li>
+  <% end %>
+</ul>

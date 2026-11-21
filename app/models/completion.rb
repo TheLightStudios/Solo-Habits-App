@@ -11,7 +11,5 @@ class Completion < ApplicationRecord
     bonus = [ user.current_streak, 10 ].min * 0.05
     xp = (habit.xp_reward * (1 + bonus)).to_i
     user.gain_xp!(xp)
-    attr = Habit::CATEGORY_ATTRIBUTES[habit.category]
-    user.increment!(attr) if attr
   end
 end

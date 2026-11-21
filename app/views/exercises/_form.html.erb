@@ -1,0 +1,31 @@
+<%# app/views/exercises/_form.html.erb %>
+<%= form_with model: [workout, exercise], class: "space-y-4" do |f| %>
+  <% if exercise.errors.any? %>
+    <div class="p-3 border border-red-500 text-red-300 rounded">
+      <% exercise.errors.full_messages.each do |msg| %>
+        <p><%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :name, "Exercício", class: "block mb-1 text-sm text-slate-400" %>
+    <%= f.text_field :name, placeholder: "Ex.: Flexão",
+          class: "w-full p-2 bg-slate-900 text-slate-100 border border-slate-700 rounded" %>
+  </div>
+
+  <div>
+    <%= f.label :details, "Detalhes (opcional)", class: "block mb-1 text-sm text-slate-400" %>
+    <%= f.text_field :details, placeholder: "Ex.: 3x15",
+          class: "w-full p-2 bg-slate-900 text-slate-100 border border-slate-700 rounded" %>
+  </div>
+
+  <div>
+    <%= f.label :xp_reward, "XP (1 a #{current_user.max_exercise_xp})", class: "block mb-1 text-sm text-slate-400" %>
+    <%= f.number_field :xp_reward, min: 1, max: current_user.max_exercise_xp,
+          class: "w-full p-2 bg-slate-900 text-slate-100 border border-slate-700 rounded" %>
+  </div>
+
+  <%= f.submit "Salvar", class: "px-4 py-2 bg-cyan-500 text-slate-950 font-bold rounded cursor-pointer" %>
+  <%= link_to "Cancelar", workout_path(workout), class: "ml-3 text-slate-400" %>
+<% end %>

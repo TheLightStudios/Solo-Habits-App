@@ -1,0 +1,24 @@
+<%# app/views/journal_entries/_form.html.erb %>
+<%= form_with model: entry, class: "space-y-4" do |f| %>
+  <% if entry.errors.any? %>
+    <div class="p-3 border border-red-500 text-red-300 rounded">
+      <% entry.errors.full_messages.each do |msg| %>
+        <p><%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <p class="text-sm text-slate-400">
+    Registro de <strong class="text-cyan-300"><%= entry.entry_date.strftime("%d/%m/%Y") %></strong>
+  </p>
+
+  <div>
+    <%= f.label :content, "Como foi o seu dia?", class: "block mb-1 text-sm text-slate-400" %>
+    <%= f.text_area :content, rows: 12,
+          placeholder: "O que aconteceu hoje? Como você se sentiu? O que aprendeu?",
+          class: "w-full p-3 bg-slate-900 text-slate-100 border border-slate-700 rounded focus:outline-none focus:border-cyan-400" %>
+  </div>
+
+  <%= f.submit "Salvar", class: "px-4 py-2 bg-cyan-500 text-slate-950 font-bold rounded cursor-pointer" %>
+  <%= link_to "Cancelar", journal_entries_path, class: "ml-3 text-slate-400" %>
+<% end %>

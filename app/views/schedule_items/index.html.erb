@@ -1,0 +1,52 @@
+<%# app/views/schedule_items/index.html.erb %>
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold text-cyan-400">AGENDA DO DIA</h1>
+  <%= link_to "+ Novo horário", new_schedule_item_path,
+        class: "px-4 py-2 border border-cyan-400 text-cyan-300 rounded hover:bg-cyan-400/10" %>
+</div>
+
+<% if @current_item || @next_item %>
+  <div class="mb-6 p-4 border border-cyan-500/40 rounded bg-slate-900/60">
+    <% if @current_item %>
+      <p class="text-xs text-slate-400">AGORA</p>
+      <p class="text-lg">
+        <span class="font-bold text-cyan-300"><%= @current_item.start_time %></span>
+        · <%= @current_item.title %>
+      </p>
+    <% end %>
+    <% if @next_item %>
+      <p class="mt-2 text-xs text-slate-400">
+        Próximo: <span class="text-cyan-300"><%= @next_item.start_time %></span> · <%= @next_item.title %>
+      </p>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @items.empty? %>
+  <p class="text-slate-400">Sua agenda está vazia. Adicione o primeiro horário, por exemplo "07:00 · Acordar".</p>
+<% end %>
+
+<ul class="space-y-3">
+  <% @items.each do |item| %>
+    <% is_current = item == @current_item %>
+    <% is_past = !is_current && item.start_time <= @now %>
+    <li class="flex justify-between items-center p-4 border rounded <%= is_current ? 'border-cyan-400 bg-cyan-950/30' : 'border-slate-700' %> <%= is_past ? 'opacity-50' : '' %>">
+      <div class="flex items-center gap-4">
+        <span class="w-14 text-lg font-bold text-cyan-400"><%= item.start_time %></span>
+        <p class="font-semibold">
+          <%= item.title %>
+          <% if is_current %>
+            <span class="ml-2 text-xs text-cyan-300">◄ AGORA</span>
+          <% end %>
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3 text-sm">
+        <%= link_to "Editar", edit_schedule_item_path(item), class: "text-slate-400 hover:text-white" %>
+        <%= button_to "Apagar", schedule_item_path(item), method: :delete,
+              form: { data: { turbo_confirm: "Remover este horário da agenda?" } },
+              class: "text-red-400 hover:text-red-300" %>
+      </div>
+    </li>
+  <% end %>
+</ul>

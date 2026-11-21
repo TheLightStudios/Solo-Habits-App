@@ -1,0 +1,66 @@
+<h1 class="text-2xl font-bold text-cyan-400 mb-2">RANKS DOS CAÇADORES</h1>
+
+<p class="text-slate-300">
+  Nível <strong><%= current_user.level %></strong> · Rank atual
+  <strong class="text-cyan-300"><%= current_user.rank %></strong>
+</p>
+
+<% if (next_rank = current_user.next_rank) %>
+  <% missing = next_rank[0] - current_user.level %>
+  <p class="text-sm text-slate-400">
+    Faltam <%= missing %> <%= missing == 1 ? "nível" : "níveis" %> para o rank <%= next_rank[1] %>.
+  </p>
+<% else %>
+  <p class="text-sm text-yellow-300">Você alcançou o rank máximo. Monarca!</p>
+<% end %>
+
+<% ranks = User::RANKS.to_a %>
+
+<div class="py-8">
+  <div class="relative h-[600px]">
+
+    <%# Trilho da barra + parte preenchida (com animação) %>
+    <div class="absolute left-5 top-0 bottom-0 w-2 -translate-x-1/2 bg-slate-800 rounded-full overflow-hidden">
+      <div class="absolute bottom-0 w-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.8)] transition-[height] duration-[1500ms] ease-out motion-reduce:transition-none"
+           style="height: 0%"
+           data-controller="rank-bar"
+           data-rank-bar-percent-value="<%= current_user.rank_progress_percent %>"></div>
+    </div>
+
+    <%# Um marcador para cada rank, do E (embaixo) ao S (topo) %>
+    <% ranks.each_with_index do |(min_level, letter), i| %>
+      <% unlocked = current_user.level >= min_level %>
+      <% current = letter == current_user.rank %>
+      <% circle =
+           if current
+             "w-10 h-10 shrink-0 rounded-full flex items-center justify-center font-bold border-2 border-cyan-300 bg-cyan-400 text-slate-950 shadow-[0_0_18px_rgba(34,211,238,0.9)]"
+           elsif unlocked
+             "w-10 h-10 shrink-0 rounded-full flex items-center justify-center font-bold border-2 border-cyan-400 bg-slate-950 text-cyan-300"
+           else
+             "w-10 h-10 shrink-0 rounded-full flex items-center justify-center font-bold border-2 border-slate-700 bg-slate-950 text-slate-600"
+           end %>
+
+      <div class="absolute left-0 right-0 flex items-center gap-4 translate-y-1/2"
+           style="bottom: <%= (i * 100.0 / (ranks.size - 1)).round(2) %>%">
+        <div class="<%= circle %>"><%= letter %></div>
+
+        <div class="<%= unlocked ? 'text-slate-100' : 'text-slate-500' %>">
+          <p class="font-bold tracking-wider">
+            RANK <%= letter %>
+            <% if current %>
+              <span class="ml-2 text-xs text-cyan-300">◄ VOCÊ ESTÁ AQUI</span>
+            <% end %>
+          </p>
+          <p class="text-xs">
+            <% if unlocked %>
+              <%= User::RANK_TITLES[letter] %> · desde o nível <%= min_level %>
+            <% else %>
+              🔒 ??? · desbloqueia no nível <%= min_level %>
+            <% end %>
+          </p>
+        </div>
+      </div>
+    <% end %>
+
+  </div>
+</div>

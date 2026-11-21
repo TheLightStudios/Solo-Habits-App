@@ -42,6 +42,6 @@ class HabitsController < ApplicationController
   end
 
   def habit_params
-    params.require(:habit).permit(:name, :category, :xp_reward)
+    params.require(:habit).permit(:name, :category, :xp_reward, :mandatory)
   end
 end

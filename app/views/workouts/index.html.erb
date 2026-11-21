@@ -1,0 +1,33 @@
+<%# app/views/workouts/index.html.erb %>
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold text-cyan-400">TREINOS</h1>
+  <%= link_to "+ Nova rotina", new_workout_path,
+        class: "px-4 py-2 border border-cyan-400 text-cyan-300 rounded hover:bg-cyan-400/10" %>
+</div>
+
+<% if @workouts.empty? %>
+  <p class="text-slate-400">Nenhuma rotina ainda. Crie a primeira, por exemplo "Treino A - Peito e Tríceps".</p>
+<% end %>
+
+<ul class="space-y-3">
+  <% @workouts.each do |workout| %>
+    <% total = workout.exercises.size %>
+    <% done = workout.exercises.count { |e| @done_ids.include?(e.id) } %>
+    <li>
+      <%= link_to workout_path(workout),
+            class: "block p-4 border border-slate-700 rounded hover:border-cyan-400 transition" do %>
+        <div class="flex justify-between items-center">
+          <p class="font-semibold"><%= workout.name %></p>
+          <p class="text-sm <%= total > 0 && done == total ? 'text-green-400' : 'text-slate-400' %>">
+            <%= done %>/<%= total %> hoje
+          </p>
+        </div>
+        <% if total > 0 %>
+          <div class="mt-3 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+            <div class="h-full bg-cyan-400" style="width: <%= (done * 100.0 / total).round %>%"></div>
+          </div>
+        <% end %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

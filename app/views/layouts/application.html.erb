@@ -26,9 +26,20 @@
   <body class="bg-slate-950 text-slate-100 min-h-screen">
     <nav class="flex justify-between items-center px-6 py-4 border-b border-cyan-500/30">
       <%= link_to "SOLO HABITS", root_path, class: "text-cyan-400 font-bold tracking-widest" %>
+
       <% if user_signed_in? %>
         <div class="flex items-center gap-4 text-sm">
           <%= link_to "Missões", root_path, class: "text-slate-300 hover:text-white" %>
+          <%= link_to "Treino", workouts_path, class: "text-slate-300 hover:text-white" %>
+          <%= link_to "Agenda", schedule_items_path, class: "text-slate-300 hover:text-white" %>
+          <%= link_to "Ranks", ranks_path, class: "text-slate-300 hover:text-white" %>
+          <%= link_to status_path, class: "text-slate-300 hover:text-white" do %>
+            Status
+            <% if current_user.attribute_points > 0 %>
+              <span class="ml-1 px-1.5 py-0.5 text-xs font-bold bg-cyan-400 text-slate-950 rounded-full"><%= current_user.attribute_points %></span>
+            <% end %>
+          <% end %>
+          <%= link_to "Diário", journal_entries_path, class: "text-slate-300 hover:text-white" %>
           <%= link_to "Loja", rewards_path, class: "text-slate-300 hover:text-white" %>
           <span class="text-yellow-300">🪙 <%= current_user.coins %></span>
           <%= button_to "Sair", destroy_user_session_path, method: :delete,
@@ -38,6 +49,9 @@
     </nav>
 
     <main class="max-w-2xl mx-auto p-6">
+      <% if flash[:penalty] %>
+        <p class="mb-4 p-3 border border-red-500 bg-red-950/50 text-red-300 rounded"><%= flash[:penalty] %></p>
+      <% end %>
       <% if notice %>
         <p class="mb-4 p-3 border border-cyan-400 bg-cyan-950/50 text-cyan-300 rounded"><%= notice %></p>
       <% end %>
