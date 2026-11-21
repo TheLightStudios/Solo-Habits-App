@@ -1,8 +1,6 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
+It's an app to help you organize your routine in a fun way, it contains not only upar de nivel, you can also buy reward with coins that you earn when completing tasks, reward example: Eat a sweet, play 1 hour
 Things you may want to cover:
 
 * Ruby version
